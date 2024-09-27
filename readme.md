@@ -41,7 +41,7 @@ sentiment-analysis/
     └── (empty folder for future static files)
 ```
 
-Note: The `model/model_cache` folder containing the pre-trained model is not included in the repository due to its large size. You can generate it using `model_save.py` before that create the folder folder `model/model_cache` through `os.makedir` or directly through IDE.
+Note: The `model/model_cache` folder containing the pre-trained model is not included in the repository due to its large size. You can generate it using `model_save.py` before that create the folder folder `model/model_cache` through `os.makedir` or directly through IDE. Create `static` folder too.
 
 ## Prerequisites
 
