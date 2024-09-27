@@ -199,40 +199,46 @@ After completing the setup, it's recommended to restart your computer to ensure 
 
 1. Ensure Docker Desktop is running and WSL2 is properly configured
 
-2. Build the Docker image (with version):
+2. Log in to Docker Hub:
+   ```bash
+   docker login
+   ```
+   Enter your Docker Hub username and password when prompted.
+
+3. Build the Docker image (with version):
    ```bash
    docker build -t sentiment-analysis-gpu:v1.0.0 .
    ```
 
-3. Run the Docker container:
+4. Run the Docker container:
    ```bash
    docker run -p 8000:8000 --gpus all sentiment-analysis-gpu:v1.0.0
    ```
 
-4. Test the containerized application:
+5. Test the containerized application:
    - Open a web browser and go to `http://localhost:8000`
    - Or use curl:
      ```bash
      curl -X POST "http://localhost:8000/predict" -H "Content-Type: application/json" -d '{"text":"I love this product!"}'
      ```
 
-5. Push to Docker Hub:
+6. Push to Docker Hub:
    ```bash
    docker tag sentiment-analysis-gpu:v1.0.0 yourusername/sentiment-analysis-gpu:v1.0.0
    docker push yourusername/sentiment-analysis-gpu:v1.0.0
    ```
 
-6. Pull from Docker Hub:
+7. Pull from Docker Hub:
    ```bash
    docker pull yourusername/sentiment-analysis-gpu:v1.0.0
    ```
 
-7. Test the pulled image:
+8. Test the pulled image:
    ```bash
    docker run -p 8000:8000 --gpus all yourusername/sentiment-analysis-gpu:v1.0.0
    ```
 
-   Test again using the methods in step 4 to ensure the pulled image works correctly.
+   Test again using the methods in step 5 to ensure the pulled image works correctly.
 
 If you encounter any issues during the Docker build or run process, try restarting Docker Desktop and your WSL2 instance:
 
