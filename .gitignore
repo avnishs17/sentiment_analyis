@@ -1,11 +1,11 @@
-# Ignore conda environment
+# Ignore large files 
 env/
+model/
 
 # Ignore any local configuration
 *.cfg
 
 # Ignore git and cache folders
-.git
 .cache
 
 # Ignore Python byte code
@@ -14,7 +14,5 @@ __pycache__
 *.pyo
 *.pyd
 
-*.md
-
-.gitignore
-.gitattributes
+project-readme.md
+setup.md
