@@ -51,7 +51,7 @@ Note: The `model/model_cache` folder containing the pre-trained model is not inc
 - NVIDIA GPU with updated drivers
 - Docker Desktop with Kubernetes support or Minikube
 - Conda (for local development)
-
+- Also make sure that wsl ubuntu version is same as we use in Dockerfile and use same cuda version too as in requirements.txt and Dockerfile.
 ## Environment Setup
 
 ### With Hyper-V (Windows 10/11 Pro or Enterprise)
