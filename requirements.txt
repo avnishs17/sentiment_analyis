@@ -1,0 +1,12 @@
+torch==1.9.0
+transformers==4.9.2
+fastapi==0.99.1
+uvicorn==0.15.0
+pydantic==1.8.2
+aiofiles==0.8.0
+six
+jinja2==3.0.3
+starlette==0.27.0
+prometheus_client==0.12.0
+numpy==1.21.0
+fastapi-cors==0.0.6

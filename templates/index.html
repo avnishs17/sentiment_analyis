@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sentiment Analysis</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center">
+    <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-2xl">
+        <h1 class="text-3xl font-bold mb-6 text-center text-indigo-600">Advanced Sentiment Analysis</h1>
+        
+        <div class="mb-4">
+            <textarea id="text-input" rows="4" class="w-full p-2 border rounded-md resize-none" placeholder="Enter your text here..."></textarea>
+        </div>
+        
+        <button id="analyze-btn" class="w-full bg-indigo-600 text-white py-2 rounded-md hover:bg-indigo-700 transition duration-300">Analyze Sentiment</button>
+        
+        <div id="result" class="mt-6 hidden">
+            <h2 class="text-xl font-semibold mb-2">Analysis Result:</h2>
+            <div id="sentiment-result" class="text-lg font-medium"></div>
+            <div id="confidence-result" class="text-md text-gray-600 mt-1"></div>
+        </div>
+        
+        <div id="history" class="mt-8 hidden">
+            <h2 class="text-xl font-semibold mb-2">Analysis History:</h2>
+            <canvas id="history-chart"></canvas>
+        </div>
+    </div>
+
+    <script>
+        let analysisHistory = [];
+        let chart;
+
+        document.getElementById('analyze-btn').addEventListener('click', async () => {
+            const text = document.getElementById('text-input').value;
+            const response = await fetch('/predict', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({text})
+            });
+            const result = await response.json();
+            
+            displayResult(result);
+            updateHistory(result);
+        });
+
+        function displayResult(result) {
+            const resultDiv = document.getElementById('result');
+            const sentimentResult = document.getElementById('sentiment-result');
+            const confidenceResult = document.getElementById('confidence-result');
+            
+            resultDiv.classList.remove('hidden');
+            
+            let sentimentText, sentimentColor;
+            if (result.sentiment === 2) {
+                sentimentText = "Positive";
+                sentimentColor = "text-green-600";
+            } else if (result.sentiment === 0) {
+                sentimentText = "Negative";
+                sentimentColor = "text-red-600";
+            } else {
+                sentimentText = "Neutral";
+                sentimentColor = "text-yellow-600";
+            }
+            
+            sentimentResult.innerHTML = `Sentiment: <span class="${sentimentColor}">${sentimentText}</span>`;
+            confidenceResult.textContent = `Confidence: ${(result.confidence * 100).toFixed(2)}%`;
+        }
+
+        function updateHistory(result) {
+            analysisHistory.push(result);
+            
+            const historyDiv = document.getElementById('history');
+            historyDiv.classList.remove('hidden');
+            
+            if (chart) {
+                chart.destroy();
+            }
+            
+            const ctx = document.getElementById('history-chart').getContext('2d');
+            chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: analysisHistory.map((_, index) => `Analysis ${index + 1}`),
+                    datasets: [{
+                        label: 'Sentiment',
+                        data: analysisHistory.map(r => r.sentiment),
+                        borderColor: 'rgb(75, 192, 192)',
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 2,
+                            ticks: {
+                                callback: function(value) {
+                                    if (value === 0) return 'Negative';
+                                    if (value === 1) return 'Neutral';
+                                    if (value === 2) return 'Positive';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
